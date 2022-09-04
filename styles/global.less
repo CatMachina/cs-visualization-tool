@@ -1,0 +1,44 @@
+// Mixins + Variables
+@black: black;
+@darkGrey: #111016;
+@white: white;
+
+.typography {
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+// Typography
+.titlePrimary {
+  font-size: 48px;
+  .typography();
+  color: @black;
+}
+.titleSecondary {
+  font-size: 48px;
+  .typography();
+  color: @white;
+}
+
+.subtitlePrimary {
+  font-size: 24px;
+  .typography();
+  color: @black;
+}
+
+.subtitleSecondary {
+  font-size: 24px;
+  .typography();
+  color: @white;
+}
+
+.textPrimary {
+  font-size: 12px;
+  .typography();
+  color: @black;
+}
+
+.textSecondary {
+  font-size: 12px;
+  .typography();
+  color: @white;
+}

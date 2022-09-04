@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="styles/index.css"/>
+    <title>Visualization Tool</title>
+  </head>
+  <body>
+    <header>
+      <div id="navbar-location">
+
+      </div>
+    </header>
+    <div id="homepage">
+      <div id="introduction">
+        <h1 class="titleSecondary">
+          The All-Purpose Visualization and Solver Tool
+        </h1>
+        <p class="subtitleSecondary">
+          On Every Computer Science Topic I've Learned
+        </p>
+      </div>
+      <div id="tool-list">
+
+      </div>
+    </div>
+  </body>
+  <script>
+    $.get("navbar.html", function (data) {
+      $("#navbar-location").html(data);
+    });
+  </script>
+</html>
