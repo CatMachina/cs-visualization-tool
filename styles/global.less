@@ -1,7 +1,10 @@
 // Mixins + Variables
 @black: black;
-@darkGrey: #111016;
 @white: white;
+@lightGrey: #BBC4CC;
+@turquoise: #30D5C8;
+
+@navbarHeight: 65px;
 
 .typography {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -41,4 +44,27 @@
   font-size: 12px;
   .typography();
   color: @white;
+}
+
+// Global styles
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.pageContainer {
+  width: 100%;
+  height: 100%;
+  padding-top: @navbarHeight;
+  box-sizing: border-box;
 }
