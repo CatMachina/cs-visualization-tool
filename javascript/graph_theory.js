@@ -1,6 +1,20 @@
+import algorithmDescription from "./data/graph_theory_data.js";
+
+let rows = 1;
+let cols = 1;
+let selectedAlgorithm = "";
 $(document).ready(function() 
 {
     makeGrid($("tbody"));
+
+    const algoDescBlock = $("#algorithm-description"); 
+    $("#selection-menu p").click(function() {
+        selectedAlgorithm = $(this).attr("algo");
+        const data = algorithmDescription[selectedAlgorithm];
+        algoDescBlock.children("h1").text(data.title);
+        algoDescBlock.children("p").text(data.description);
+
+    });
 });
 
 function makeGrid(container) 
@@ -9,10 +23,8 @@ function makeGrid(container)
     const r = document.querySelector(":root");
     // Other initializations
     const defaultGridCellSize = getComputedStyle(r).getPropertyValue("--default-gridItem-size");
-    const rows = Math.floor(container.height() / defaultGridCellSize);
-    const cols = Math.floor(container.width() / defaultGridCellSize);
-    console.log(rows);
-    console.log(cols);
+    rows = Math.floor(container.height() / defaultGridCellSize);
+    cols = Math.floor(container.width() / defaultGridCellSize);
     for(let i = 0; i < rows; ++i)
     {
         const row = $("<tr></tr>").attr("row", i);

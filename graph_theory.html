@@ -1,7 +1,7 @@
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="javascript/graph_theory.js"></script>
+    <script type="module" src="javascript/graph_theory.js"></script>
     <link rel="stylesheet" href="styles/graph_theory.css" />
   </head>
   <body>
@@ -9,14 +9,37 @@
       <div id="navbar-location"></div>
     </header>
     <div class="pageContainer">
-      <div id="selection-menu">
-        
+      <div id="user-interface">
+        <h1>Select an Algorithm</h1>
+        <div id="selection-menu">
+          <p algo="bfs">Breadth First Search (BFS)</p>
+          <p algo="dfs">Depth First Search (DFS)</p>
+          <p algo="dijkstra">Dijkstra</p>
+          <p algo="spfa">Shortest Path Faster Algorithm (SPFA)</p>
+        </div>
+        <div class="verticalLine"></div>
+        <div id="algorithm-description">
+          <h1>
+            Algorithm Name
+          </h1>
+          <p>
+            Algorithm description            
+          </p>
+          <button>
+            <p>Visualize!</p>
+          </button>
+        </div>
+        <div id="legend">
+          <span>Source Node <img src="assets/source-icon.svg"/></span>
+          <span>Target Node <img src="assets/target-icon.svg"/></span>
+          <span>Wall Node <img src="assets/wall-icon.svg"/></span>
+        </div>
       </div>
-    <table>
-        <tbody>
-            
-        </tbody>
-    </table>
+      <table>
+          <tbody>
+              
+          </tbody>
+      </table>
     </div>
   </body>
   <script>
