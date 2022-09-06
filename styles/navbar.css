@@ -12,22 +12,22 @@
   color: white;
 }
 .subtitlePrimary {
-  font-size: 24px;
+  font-size: 36px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: black;
 }
 .subtitleSecondary {
-  font-size: 24px;
+  font-size: 36px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: white;
 }
 .textPrimary {
-  font-size: 12px;
+  font-size: 18px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: black;
 }
 .textSecondary {
-  font-size: 12px;
+  font-size: px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: white;
 }
@@ -68,7 +68,7 @@ a {
   background-color: white;
 }
 #navbar-location #navbar #visualization-tool-home {
-  margin: auto auto auto 15px;
+  margin: 0 auto 0 15px;
 }
 #navbar-location #navbar #visualization-tool-home:hover {
   cursor: pointer;
