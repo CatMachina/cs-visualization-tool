@@ -6,7 +6,6 @@
 
 #user-interface {
     width: 100%;
-    height: 30%;
     background-color: @turquoise;
     display: grid;
     grid-template-areas: "head head head"
@@ -102,5 +101,31 @@ table {
         height: var(--default-gridItem-size);
         border: 1px @lightGrey solid;
         padding: 0;
+    }
+    .wall {
+        background-color: @black;
+    }
+    #source-node, #target-node {
+        img {
+            width: 90%;
+            height: 90%;
+            display: block;
+            margin: auto;
+            pointer-events: none;
+        }
+    }
+    .shrinkAnimation > img{
+        animation-name: specialNodePlacementAnimation;
+        animation-duration: 0.5s;
+        animation-timing-function: ease-out;
+        animation-delay: 0.5s;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes specialNodePlacementAnimation {
+    100% {
+        width: 40%;
+        height: 40%;
     }
 }

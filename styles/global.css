@@ -57,18 +57,3 @@ body {
   padding-top: 65px;
   box-sizing: border-box;
 }
-#introduction {
-  width: 100%;
-  min-height: 250px;
-  max-height: 500px;
-  height: 40%;
-  display: flex;
-  background-color: #30D5C8;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: center;
-}
-#introduction h1 {
-  margin-top: 8%;
-}

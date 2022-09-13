@@ -1,6 +1,13 @@
 .typography {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
+.unselectable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
 .titlePrimary {
   font-size: 48px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -55,7 +62,6 @@ body {
 }
 #user-interface {
   width: 100%;
-  height: 30%;
   background-color: #30D5C8;
   display: grid;
   grid-template-areas: "head head head" "menu div desc" "menu . ." "help help help";
@@ -156,4 +162,28 @@ table td {
   height: var(--default-gridItem-size);
   border: 1px #BBC4CC solid;
   padding: 0;
+}
+table .wall {
+  background-color: black;
+}
+table #source-node img,
+table #target-node img {
+  width: 90%;
+  height: 90%;
+  display: block;
+  margin: auto;
+  pointer-events: none;
+}
+table .shrinkAnimation > img {
+  animation-name: specialNodePlacementAnimation;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+}
+@keyframes specialNodePlacementAnimation {
+  100% {
+    width: 40%;
+    height: 40%;
+  }
 }
