@@ -4,9 +4,8 @@ let rows = 1;
 let cols = 1;
 let selectedAlgorithm = "";
 let creatingWalls = false;
-let sourceCoordinates = [0, 0];
-let targetCoordinates = [0, 0];
-let draggedElement = null
+let coordinates = {};
+let draggedElement = null;
 
 $(document).ready(function() 
 {
@@ -20,6 +19,19 @@ $(document).ready(function()
         const data = algorithmDescription[selectedAlgorithm];
         algoDescBlock.children("h1").text(data.title);
         algoDescBlock.children("p").text(data.description);
+        algoDescBlock.children("button").click(function() 
+        {
+            $("td").addClass("unselectable");
+            let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
+            if(!path)
+            {
+                path = getPath(table, coordinates.target, coordinates.source);
+            }
+            animateAlgorithm(totalQueue, animatePath.bind(null, path));
+        });
+    });
+    $("#reset").click(function() {
+        $("td").removeClass();
     });
 
     $("td").mousedown(function() 
@@ -42,14 +54,25 @@ $(document).ready(function()
     })
     .on("dragstart", function() 
     {
-        $(this).removeClass("unselectable");
-        if(!checkCell($(this)))
-            return false;
-        draggedElement = $(this).attr("id");
+        if(checkCell($(this)))
+        {
+            $(this).removeClass("unselectable");
+            draggedElement = $(this).attr("id");
+        }
+    })
+    .on("dragend", function()
+    {
+        if(draggedElement !== null)
+        {
+            $(this).attr("id", draggedElement)
+            .attr("draggable", true)
+            .html(`<img src=assets/${draggedElement.split("-")[0]}-icon.svg />`);
+        }
     })
     .on("dragenter", function(event) 
     {
-        console.log("enter")
+        if(cannotDrop($(this)))
+            return;
         event.preventDefault();
         if(!checkCell($(this)))
         {
@@ -60,18 +83,80 @@ $(document).ready(function()
         $(this).attr("id", draggedElement).attr("draggable", true);
     })
     .on("dragover", function(event) {
+        // console.log("dragover")
+        if(cannotDrop($(this)))
+            return;
         event.preventDefault();
     })
     .on("dragleave", function()
     {   
+        if(cannotDrop($(this))) 
+            return;
         $(this).removeAttr("id").attr("draggable", false).removeClass("shrinkAnimation").empty();
     })
     .on("drop", function()
     {
+        console.log("drop");
+        if(cannotDrop($(this)))
+            return;
         $(this).removeClass().addClass("unselectable");
+        coordinates[draggedElement.split("-")[0]] = [parseInt($(this).parent().attr("row")), parseInt($(this).attr("col"))];
         draggedElement = null;
     });
 });
+
+function getPath(table)
+{
+    let stack = [coordinates.target];
+    const moves = [[0,-1], [-1, 0], [0,1], [1, 0]];
+    while(stack.length != 0)
+    {
+        const coords = stack[0];
+        if(coords[0] === coordinates.source[0] && coords[1] == coordinates.source[1])
+            break;
+        for(let i = 0; i < moves.length; ++i)
+        {
+            const row = coords[0] + moves[i][0];
+            const col = coords[1] + moves[i][1];
+            const next = $(`tr[row=${row}] > td[col=${col}]`);
+            const nextCoords = [row, col]
+            const weight = next.length && next.attr("weight") !== undefined ? parseInt(next.attr("weight")) : 1; 
+            if(next.length != 0 && table[nextCoords] === table[coords] - weight)
+            {
+                stack.unshift(nextCoords);
+                break;
+            }
+        }
+    }
+    return stack;
+}
+
+function animateAlgorithm(totalQueue, pathAnimationCallback) {
+    if(totalQueue.length === 0)
+    {
+        pathAnimationCallback();
+        return;
+    }
+    const coords = totalQueue.shift();
+    $(`tr[row=${coords[0]}] > td[col=${coords[1]}]`).addClass("visited");
+    setTimeout(animateAlgorithm.bind(this, totalQueue, pathAnimationCallback), 50);
+}
+
+function animatePath(path) {
+    if(path.length === 0)
+    {
+        $("td").removeClass("unselectable");
+        return;
+    }
+    const coords = path.shift();
+    // console.log(coords);
+    $(`tr[row=${coords[0]}] > td[col=${coords[1]}]`).removeClass("visited").addClass("path");
+    setTimeout(animatePath.bind(this, path), 50);
+}
+
+function cannotDrop(element) {
+    return element.attr("class") == "wall" || (checkCell(element) && element.attr("id") != draggedElement);
+}
 
 function checkCell(element) {
     return element.attr("id") === "source-node" || element.attr("id") === "target-node";
@@ -99,19 +184,19 @@ function makeGrid(container)
     const defaultGridCellSize = getComputedStyle(r).getPropertyValue("--default-gridItem-size");
     rows = Math.floor(container.height() / defaultGridCellSize);
     cols = Math.floor(container.width() / defaultGridCellSize);
-    sourceCoordinates = [Math.floor(rows / 2) - 1, Math.floor(cols / 4)];
-    targetCoordinates = [Math.floor(rows / 2) - 1, Math.floor(3 * cols / 4)];
+    coordinates.source = [Math.floor(rows / 2) - 1, Math.floor(cols / 4)];
+    coordinates.target = [Math.floor(rows / 2) - 1, Math.floor(3 * cols / 4)];
     for(let i = 0; i < rows; ++i)
     {
         const row = $("<tr></tr>").attr("row", i);
         for(let j = 0; j < cols; ++j)
         {
             const element = $("<td></td>").attr("col", j);
-            if(i == sourceCoordinates[0] && j == sourceCoordinates[1])
+            if(i === coordinates.source[0] && j === coordinates.source[1])
             {
                 element.html("<img src='assets/source-icon.svg' />").attr("id", "source-node").addClass("unselectable");
             }
-            else if(i == targetCoordinates[0] && j == targetCoordinates[1])
+            else if(i === coordinates.target[0] && j === coordinates.target[1])
             {
                 element.html("<img src='assets/target-icon.svg' />").attr("id", "target-node").addClass("unselectable");
             }

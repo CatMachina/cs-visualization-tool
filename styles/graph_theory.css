@@ -181,6 +181,31 @@ table .shrinkAnimation > img {
   animation-delay: 0.5s;
   animation-fill-mode: forwards;
 }
+table .path {
+  background-color: #FFEF00;
+}
+table .visited {
+  animation-name: visitedNode;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+@keyframes visitedNode {
+  0% {
+    background-color: #00BCE3;
+    border-radius: 80%;
+    border: none;
+  }
+  60% {
+    background-color: #BFB9FA;
+    border-radius: 40%;
+    border: none;
+  }
+  100% {
+    background-color: #30D5C8;
+    border-radius: 0%;
+    border: 1px #BBC4CC solid;
+  }
+}
 @keyframes specialNodePlacementAnimation {
   100% {
     width: 40%;
