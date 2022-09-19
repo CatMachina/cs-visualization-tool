@@ -6,6 +6,7 @@ let selectedAlgorithm = "";
 let creatingWalls = false;
 let coordinates = {};
 let draggedElement = null;
+let animationRunning = false;
 
 $(document).ready(function() 
 {
@@ -15,14 +16,16 @@ $(document).ready(function()
     const algoDescBlock = $("#algorithm-description"); 
     $("#selection-menu p").click(function() 
     {
+        algoDescBlock.children("button").off();
         selectedAlgorithm = $(this).attr("algo");
         const data = algorithmDescription[selectedAlgorithm];
         algoDescBlock.children("h1").text(data.title);
         algoDescBlock.children("p").text(data.description);
         algoDescBlock.children("button").click(function() 
         {
-            $("td").addClass("unselectable");
+            $("td").addClass("animating");
             let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
+            animationRunning = true;
             if(!path)
             {
                 path = getPath(table, coordinates.target, coordinates.source);
@@ -30,8 +33,10 @@ $(document).ready(function()
             animateAlgorithm(totalQueue, animatePath.bind(null, path));
         });
     });
-    $("#reset").click(function() {
+    $("#reset").click(function() 
+    {
         $("td").removeClass();
+        animationRunning = false;
     });
 
     $("td").mousedown(function() 
@@ -82,7 +87,8 @@ $(document).ready(function()
         $(this).addClass("shrinkAnimation");
         $(this).attr("id", draggedElement).attr("draggable", true);
     })
-    .on("dragover", function(event) {
+    .on("dragover", function(event) 
+    {
         // console.log("dragover")
         if(cannotDrop($(this)))
             return;
@@ -96,7 +102,6 @@ $(document).ready(function()
     })
     .on("drop", function()
     {
-        console.log("drop");
         if(cannotDrop($(this)))
             return;
         $(this).removeClass().addClass("unselectable");
@@ -131,7 +136,13 @@ function getPath(table)
     return stack;
 }
 
-function animateAlgorithm(totalQueue, pathAnimationCallback) {
+function animateAlgorithm(totalQueue, pathAnimationCallback) 
+{
+    if(!animationRunning)
+    {
+        cancelAnimation();
+        return;
+    }
     if(totalQueue.length === 0)
     {
         pathAnimationCallback();
@@ -142,10 +153,16 @@ function animateAlgorithm(totalQueue, pathAnimationCallback) {
     setTimeout(animateAlgorithm.bind(this, totalQueue, pathAnimationCallback), 50);
 }
 
-function animatePath(path) {
+function animatePath(path) 
+{
+    if(!animationRunning)
+    {
+        cancelAnimation();
+        return;
+    }
     if(path.length === 0)
     {
-        $("td").removeClass("unselectable");
+        cancelAnimation();
         return;
     }
     const coords = path.shift();
@@ -154,11 +171,18 @@ function animatePath(path) {
     setTimeout(animatePath.bind(this, path), 50);
 }
 
-function cannotDrop(element) {
+function cancelAnimation() 
+{
+    $("td").removeClass("animating");
+}
+
+function cannotDrop(element) 
+{
     return element.attr("class") == "wall" || (checkCell(element) && element.attr("id") != draggedElement);
 }
 
-function checkCell(element) {
+function checkCell(element) 
+{
     return element.attr("id") === "source-node" || element.attr("id") === "target-node";
 }
 
