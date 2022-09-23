@@ -1,0 +1,11 @@
+Graph & Pathfinder:
+    - Add weights
+    - Add weighted algorithms
+    - Fix network calls on draggable elements
+
+Sorting:
+    - Everything
+
+Home:
+    - Add feature blocks linking to graph and Sorting
+    - Animated top block with changing colours
