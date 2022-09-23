@@ -13,26 +13,7 @@ $(document).ready(function()
     makeGrid($("tbody"));
     $("table, table *").attr("draggable", false);
     $("#source-node, #target-node").attr("draggable", true);
-    const algoDescBlock = $("#algorithm-description"); 
-    $("#selection-menu p").click(function() 
-    {
-        algoDescBlock.children("button").off();
-        selectedAlgorithm = $(this).attr("algo");
-        const data = algorithmDescription[selectedAlgorithm];
-        algoDescBlock.children("h1").text(data.title);
-        algoDescBlock.children("p").text(data.description);
-        algoDescBlock.children("button").click(function() 
-        {
-            $("td").addClass("animating");
-            let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
-            animationRunning = true;
-            if(!path)
-            {
-                path = getPath(table, coordinates.target, coordinates.source);
-            }
-            animateAlgorithm(totalQueue, animatePath.bind(null, path));
-        });
-    });
+    loadSelectionMenu();
     $("#reset").click(function() 
     {
         $("td").removeClass();
@@ -87,8 +68,7 @@ $(document).ready(function()
         $(this).addClass("shrinkAnimation");
         $(this).attr("id", draggedElement).attr("draggable", true);
     })
-    .on("dragover", function(event) 
-    {
+    .on("dragover", function(event) {
         // console.log("dragover")
         if(cannotDrop($(this)))
             return;
@@ -227,5 +207,56 @@ function makeGrid(container)
             row.append(element);
         }
         container.append(row);
+    }
+}
+
+function loadSelectionMenu()
+{
+    const $menu = $("#menu");
+    $menu.removeClass().addClass("algorithmSelection").html(`
+        <h1>Select an Algorithm</h1>
+        <div id="selection-menu">
+           ${getMenuElements()}
+        </div>
+    `);
+    $("#selection-menu p").click(function() 
+    {
+        switchToAlgorithmDescription();
+        selectedAlgorithm = $(this).attr("algo");
+        const data = algorithmDescription[selectedAlgorithm];
+        $menu.children("h1").text(data.title);
+        $menu.children("p").text(data.description);
+        $("#back-to-selection").click(loadSelectionMenu);
+        $("#visualize").click(function() 
+        {
+            console.log("Here");
+            $("td").addClass("animating");
+            let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
+            animationRunning = true;
+            if(!path)
+            {
+                path = getPath(table, coordinates.target, coordinates.source);
+            }
+            animateAlgorithm(totalQueue, animatePath.bind(null, path));
+        });
+    });
+    function getMenuElements()
+    {
+        let ret = "";
+        Object.keys(algorithmDescription).forEach(key => {
+            ret += `<p algo=${key}>${algorithmDescription[key].title}</p>`;
+        });
+        return ret;
+    }
+    function switchToAlgorithmDescription()
+    {
+        $menu.removeClass().addClass("algorithmFeature").html(`
+            <h1></h1>
+            <p></p>
+            <div class="buttonWrapper">
+                <button id="back-to-selection" class="buttonSecondary"><p>Cancel</p></button>
+                <button id="visualize" class="buttonPrimary"><p>Visualize</p></button>
+            </div>
+        `);
     }
 }

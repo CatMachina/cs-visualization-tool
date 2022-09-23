@@ -63,26 +63,27 @@ body {
 #user-interface {
   width: 100%;
   background-color: #30D5C8;
-  display: grid;
-  grid-template-areas: "head head head" "menu div desc" "menu . ." "help help help";
-  grid-template-rows: 65px 1fr 12px 100px;
-  grid-template-columns: 3fr 1px 2fr;
 }
 #user-interface h1 {
   font-size: 36px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: white;
-  text-align: center;
-  grid-area: head;
-  margin: 6px 0 12px 0;
 }
 #user-interface p {
   font-size: 18px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: white;
 }
-#user-interface #selection-menu {
-  grid-area: menu;
+#user-interface #menu {
+  width: 100%;
+  height: calc(30% - 100px);
+}
+#user-interface .algorithmSelection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#user-interface .algorithmSelection #selection-menu {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -90,23 +91,17 @@ body {
   align-content: flex-start;
   margin: 0;
 }
-#user-interface #selection-menu p {
-  font-size: 18px;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  color: white;
+#user-interface .algorithmSelection #selection-menu h1 {
+  text-align: center;
+  margin: 6px 0 12px 0;
+}
+#user-interface .algorithmSelection #selection-menu p {
   margin: 12px;
 }
-#user-interface #selection-menu p:hover {
+#user-interface .algorithmSelection #selection-menu p:hover {
   cursor: pointer;
 }
-#user-interface .verticalLine {
-  grid-area: div;
-  background-color: white;
-  border: 1px solid white;
-  margin: 6px;
-}
-#user-interface #algorithm-description {
-  grid-area: desc;
+#user-interface .algorithmFeature {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -114,28 +109,15 @@ body {
   text-align: center;
   margin: 0;
 }
-#user-interface #algorithm-description h1 {
-  font-size: 28px;
+#user-interface .algorithmFeature h1 {
   margin: 12px;
 }
-#user-interface #algorithm-description p {
+#user-interface .algorithmFeature p {
   margin: 12px;
-}
-#user-interface #algorithm-description button {
-  width: 120px;
-  height: 40px;
-  border: none;
-  background-color: white;
-}
-#user-interface #algorithm-description button p {
-  color: #30D5C8;
-  margin: auto;
-}
-#user-interface #algorithm-description button:hover {
-  cursor: pointer;
 }
 #user-interface #legend {
-  grid-area: help;
+  width: 100%;
+  height: 100px;
   background-color: white;
   display: flex;
   justify-content: space-around;
@@ -150,6 +132,34 @@ body {
   width: 20px;
   height: 20px;
   margin-left: 12px;
+}
+#user-interface .buttonPrimary {
+  width: 120px;
+  height: 40px;
+  border: 2px solid white;
+  background-color: #30D5C8;
+}
+#user-interface .buttonPrimary p {
+  font-size: 18px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: white;
+  margin: auto;
+}
+#user-interface .buttonPrimary:hover {
+  cursor: pointer;
+}
+#user-interface .buttonSecondary {
+  width: 120px;
+  height: 40px;
+  border: none;
+  background-color: white;
+}
+#user-interface .buttonSecondary p {
+  color: #30D5C8;
+  margin: auto;
+}
+#user-interface .buttonSecondary:hover {
+  cursor: pointer;
 }
 table {
   width: 100%;
