@@ -3,7 +3,8 @@ import algorithmDescription from "./data/graph_theory_data.js";
 let rows = 1;
 let cols = 1;
 let selectedAlgorithm = "";
-let creatingWalls = false;
+let creatingCells = false;
+let currentCell = "wall";
 let coordinates = {};
 let draggedElement = null;
 let animationRunning = false;
@@ -14,6 +15,10 @@ $(document).ready(function()
     $("table, table *").attr("draggable", false);
     $("#source-node, #target-node").attr("draggable", true);
     loadSelectionMenu();
+    $("#selectables").append(generateSelectables());
+    $("#selectables > img").click(function() {
+        selectGridPlacementElement($(this))
+    });
     $("#reset").click(function() 
     {
         $("td").removeClass();
@@ -23,20 +28,20 @@ $(document).ready(function()
     $("td").mousedown(function() 
     {
         if(!checkCell($(this))) {
-            creatingWalls = true;
-            makeWall($(this));
+            creatingCells = true;
+            makeElement($(this));
         }
     })
     .mouseover(function ()
     {
-        if(creatingWalls)
+        if(creatingCells)
         {
-            makeWall($(this));
+            makeElement($(this));
         }
     })
     .mouseup(function() 
     {
-        creatingWalls = false;
+        creatingCells = false;
     })
     .on("dragstart", function() 
     {
@@ -156,27 +161,35 @@ function cancelAnimation()
     $("td").removeClass("animating");
 }
 
-function cannotDrop(element) 
+function cannotDrop($element) 
 {
-    return element.attr("class") == "wall" || (checkCell(element) && element.attr("id") != draggedElement);
+    return $element.attr("class") == "wall" || (checkCell($element) && $element.attr("id") != draggedElement);
 }
 
-function checkCell(element) 
+function checkCell($element) 
 {
-    return element.attr("id") === "source-node" || element.attr("id") === "target-node";
+    return $element.attr("id") === "source-node" || $element.attr("id") === "target-node";
 }
 
-function makeWall(element)
+function makeElement($element)
 {
-    if(checkCell(element))
+    if(checkCell($element))
         return
-    if(element.attr("class") === "wall")
+    if(currentCell === "wall")
     {
-        element.removeClass("wall");
+        if($element.attr("class") === "wall")
+            $element.removeClass();
+        else
+            $element.removeAttr("weight").addClass("wall").empty();
     }
+    else if (currentCell === "eraser")
+        $element.removeClass().removeAttr("weight").empty();
     else
     {
-        element.addClass("wall");
+        if($element.attr("weight") == currentCell)
+            $element.removeAttr("weight").empty();
+        else 
+            $element.removeClass().html(`<img src="./assets/${currentCell}-icon.svg" />`).attr("weight", parseInt(currentCell)).addClass("unselectable");
     }
 }
 
@@ -212,6 +225,7 @@ function makeGrid(container)
 
 function loadSelectionMenu()
 {
+    $("#selectables > img:not(#wall)").removeClass("disabled");
     const $menu = $("#menu");
     $menu.removeClass().addClass("algorithmSelection").html(`
         <h1>Select an Algorithm</h1>
@@ -223,13 +237,16 @@ function loadSelectionMenu()
     {
         switchToAlgorithmDescription();
         selectedAlgorithm = $(this).attr("algo");
+        if (!algorithmDescription[selectedAlgorithm].weighted){
+            $("#selectables > img:not(#wall)").addClass("disabled");
+            selectGridPlacementElement($("#selectables > img#wall"));
+        }
         const data = algorithmDescription[selectedAlgorithm];
         $menu.children("h1").text(data.title);
         $menu.children("p").text(data.description);
         $("#back-to-selection").click(loadSelectionMenu);
         $("#visualize").click(function() 
         {
-            console.log("Here");
             $("td").addClass("animating");
             let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
             animationRunning = true;
@@ -259,4 +276,22 @@ function loadSelectionMenu()
             </div>
         `);
     }
+}
+
+function generateSelectables()
+{
+    let htmlString = "<img id='wall' class='selected' src='./assets/wall-icon.svg' />";
+    for(let i = 0; i <= 9; ++i)
+    {
+        htmlString += `<img id=${i} src='./assets/${i}-icon.svg'/>`;
+    }
+    htmlString += "<img id='eraser' src='./assets/eraser-icon.svg' />";
+    return htmlString;
+}
+
+function selectGridPlacementElement($element) 
+{
+    $element.siblings().removeClass("selected");
+    currentCell = $element.attr("id");
+    $element.addClass("selected");
 }
