@@ -238,7 +238,8 @@ function loadSelectionMenu()
         switchToAlgorithmDescription();
         selectedAlgorithm = $(this).attr("algo");
         if (!algorithmDescription[selectedAlgorithm].weighted){
-            $("#selectables > img:not(#wall)").addClass("disabled");
+            $("#selectables > img:not(#wall, #eraser)").addClass("disabled");
+            $("td[weight]").removeClass().removeAttr("weight").empty();
             selectGridPlacementElement($("#selectables > img#wall"));
         }
         const data = algorithmDescription[selectedAlgorithm];

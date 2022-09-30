@@ -137,6 +137,7 @@ body {
 }
 #user-interface #legend #selectables .disabled {
   pointer-events: none;
+  background-color: rgba(255, 0, 0, 0.4);
 }
 #user-interface #legend #selectables .disabled:hover {
   cursor: not-allowed;
