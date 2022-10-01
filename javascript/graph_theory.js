@@ -2,7 +2,7 @@ import algorithmDescription from "./data/graph_theory_data.js";
 
 let rows = 1;
 let cols = 1;
-let selectedAlgorithm = "";
+let selectedAlgorithm = {};
 let creatingCells = false;
 let currentCell = "wall";
 let coordinates = {};
@@ -14,9 +14,22 @@ $(document).ready(function()
     makeGrid($("tbody"));
     $("table, table *").attr("draggable", false);
     $("#source-node, #target-node").attr("draggable", true);
-    loadSelectionMenu();
+    $("#weighted-selection > button").click(function() 
+    {
+        const weighted = $(this).attr("id") === "weighted";
+        loadSelectionMenu(weighted);
+        if(!weighted)
+        {
+            $("#selectables > img:not(#wall, #eraser)").addClass("disabled");
+            $("td[weight]").removeClass().removeAttr("weight").empty();
+            selectGridPlacementElement($("#selectables > img#wall"));
+        }
+        else
+            $("#selectables > img").removeClass("disabled");
+    })
     $("#selectables").append(generateSelectables());
-    $("#selectables > img").click(function() {
+    $("#selectables > img").click(function() 
+    {
         selectGridPlacementElement($(this))
     });
     $("#reset").click(function() 
@@ -223,29 +236,24 @@ function makeGrid(container)
     }
 }
 
-function loadSelectionMenu()
+function loadSelectionMenu(weighted)
 {
-    $("#selectables > img:not(#wall)").removeClass("disabled");
-    const $menu = $("#menu");
-    $menu.removeClass().addClass("algorithmSelection").html(`
-        <h1>Select an Algorithm</h1>
-        <div id="selection-menu">
-           ${getMenuElements()}
-        </div>
-    `);
+    let menuElementHTMLString = "";
+    Object.keys(algorithmDescription).forEach(key => {
+        if(algorithmDescription[key].weighted === weighted)
+            menuElementHTMLString += `<p algo=${key}>${algorithmDescription[key].title}</p>`;
+    });
+    $("#selection-menu").html(menuElementHTMLString);
+
     $("#selection-menu p").click(function() 
     {
-        switchToAlgorithmDescription();
         selectedAlgorithm = $(this).attr("algo");
-        if (!algorithmDescription[selectedAlgorithm].weighted){
-            $("#selectables > img:not(#wall, #eraser)").addClass("disabled");
-            $("td[weight]").removeClass().removeAttr("weight").empty();
-            selectGridPlacementElement($("#selectables > img#wall"));
-        }
         const data = algorithmDescription[selectedAlgorithm];
-        $menu.children("h1").text(data.title);
-        $menu.children("p").text(data.description);
-        $("#back-to-selection").click(loadSelectionMenu);
+        $("#algorithm-description").html(`
+            <h1>${data.title}</h1>
+            <p>${data.description}</p>
+            <button id="visualize" class="buttonPrimary"><p>Visualize</p></button>
+        `);
         $("#visualize").click(function() 
         {
             $("td").addClass("animating");
@@ -258,25 +266,6 @@ function loadSelectionMenu()
             animateAlgorithm(totalQueue, animatePath.bind(null, path));
         });
     });
-    function getMenuElements()
-    {
-        let ret = "";
-        Object.keys(algorithmDescription).forEach(key => {
-            ret += `<p algo=${key}>${algorithmDescription[key].title}</p>`;
-        });
-        return ret;
-    }
-    function switchToAlgorithmDescription()
-    {
-        $menu.removeClass().addClass("algorithmFeature").html(`
-            <h1></h1>
-            <p></p>
-            <div class="buttonWrapper">
-                <button id="back-to-selection" class="buttonSecondary"><p>Cancel</p></button>
-                <button id="visualize" class="buttonPrimary"><p>Visualize</p></button>
-            </div>
-        `);
-    }
 }
 
 function generateSelectables()

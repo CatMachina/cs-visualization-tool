@@ -77,31 +77,62 @@ body {
 #user-interface #menu {
   width: 100%;
   height: calc(30% - 100px);
-}
-#user-interface .algorithmSelection {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-#user-interface .algorithmSelection #selection-menu {
+#user-interface #menu h1 {
+  margin: 6px auto;
+}
+#user-interface #menu #menu-wrapper {
+  width: 100%;
+  height: calc(100% - 60px);
+  display: grid;
+  grid-template-columns: 120px 1px 280px 1px 1fr;
+  grid-template-rows: 1fr;
+}
+#user-interface #menu #menu-wrapper .verticalLine {
+  background-color: white;
+  border: 1px solid white;
+  margin: 12px 12px 18px 0;
+}
+#user-interface #menu #menu-wrapper #weighted-selection .selected {
+  background-color: white;
+}
+#user-interface #menu #menu-wrapper #weighted-selection .selected p {
+  color: #30D5C8;
+}
+#user-interface #menu #menu-wrapper #weighted-selection button {
+  width: 100%;
+  height: 50%;
+  background-color: #30D5C8;
+  border: none;
+}
+#user-interface #menu #menu-wrapper #weighted-selection button:hover {
+  background-color: white;
+}
+#user-interface #menu #menu-wrapper #weighted-selection button:hover p {
+  color: #30D5C8;
+}
+#user-interface #menu #menu-wrapper #selection-menu {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  flex-direction: column;
+  overflow: scroll;
   align-content: flex-start;
   margin: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-#user-interface .algorithmSelection #selection-menu h1 {
-  text-align: center;
-  margin: 6px 0 12px 0;
-}
-#user-interface .algorithmSelection #selection-menu p {
+#user-interface #menu #menu-wrapper #selection-menu p {
   margin: 12px;
 }
-#user-interface .algorithmSelection #selection-menu p:hover {
+#user-interface #menu #menu-wrapper #selection-menu p:hover {
   cursor: pointer;
 }
-#user-interface .algorithmFeature {
+#user-interface #menu #menu-wrapper #selection-menu::-webkit-scrollbar {
+  display: none;
+}
+#user-interface #menu #menu-wrapper #algorithm-description {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -109,11 +140,16 @@ body {
   text-align: center;
   margin: 0;
 }
-#user-interface .algorithmFeature h1 {
+#user-interface #menu #menu-wrapper #algorithm-description h1 {
   margin: 12px;
 }
-#user-interface .algorithmFeature p {
+#user-interface #menu #menu-wrapper #algorithm-description p {
   margin: 12px;
+}
+#user-interface #menu #menu-wrapper #algorithm-description button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #user-interface #legend {
   width: 100%;
