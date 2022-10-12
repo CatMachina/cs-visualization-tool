@@ -2,31 +2,21 @@ import algorithmDescription from "./data/graph_theory_data.js";
 
 let rows = 1;
 let cols = 1;
-let selectedAlgorithm = {};
+let selectedAlgorithm = "";
 let creatingCells = false;
 let currentCell = "wall";
 let coordinates = {};
 let draggedElement = null;
 let animationRunning = false;
+let unweightedGrid = [];
+let weightedGrid = [];
 
 $(document).ready(function() 
 {
     makeGrid($("tbody"));
     $("table, table *").attr("draggable", false);
     $("#source-node, #target-node").attr("draggable", true);
-    $("#weighted-selection > button").click(function() 
-    {
-        const weighted = $(this).attr("id") === "weighted";
-        loadSelectionMenu(weighted);
-        if(!weighted)
-        {
-            $("#selectables > img:not(#wall, #eraser)").addClass("disabled");
-            $("td[weight]").removeClass().removeAttr("weight").empty();
-            selectGridPlacementElement($("#selectables > img#wall"));
-        }
-        else
-            $("#selectables > img").removeClass("disabled");
-    })
+    loadSelectionMenu();
     $("#selectables").append(generateSelectables());
     $("#selectables > img").click(function() 
     {
@@ -110,10 +100,18 @@ $(document).ready(function()
 
 function getPath(table)
 {
+    console.log(table);
     let stack = [coordinates.target];
     const moves = [[0,-1], [-1, 0], [0,1], [1, 0]];
+    let counter = 0;
     while(stack.length != 0)
     {
+        counter++;
+        if(counter > 1000)
+        {
+            break;
+        }
+        // console.log(stack.length);
         const coords = stack[0];
         if(coords[0] === coordinates.source[0] && coords[1] == coordinates.source[1])
             break;
@@ -121,10 +119,11 @@ function getPath(table)
         {
             const row = coords[0] + moves[i][0];
             const col = coords[1] + moves[i][1];
-            const next = $(`tr[row=${row}] > td[col=${col}]`);
-            const nextCoords = [row, col]
-            const weight = next.length && next.attr("weight") !== undefined ? parseInt(next.attr("weight")) : 1; 
-            if(next.length != 0 && table[nextCoords] === table[coords] - weight)
+            const $next = $(`tr[row=${row}] > td[col=${col}]`);
+            const $curr = $(`tr[row=${coords[0]}] > td[col=${coords[1]}]`);
+            const nextCoords = [row, col];
+            const weight = $curr.attr("weight") !== undefined ? parseInt($curr.attr("weight")) : 1;
+            if($next.length && table[nextCoords] === table[coords] - weight)
             {
                 stack.unshift(nextCoords);
                 break;
@@ -236,17 +235,31 @@ function makeGrid(container)
     }
 }
 
-function loadSelectionMenu(weighted)
+function loadSelectionMenu()
 {
     let menuElementHTMLString = "";
     Object.keys(algorithmDescription).forEach(key => {
-        if(algorithmDescription[key].weighted === weighted)
-            menuElementHTMLString += `<p algo=${key}>${algorithmDescription[key].title}</p>`;
+        menuElementHTMLString += `<button algo=${key}><p>${algorithmDescription[key].title}</p></button>`;
     });
     $("#selection-menu").html(menuElementHTMLString);
 
-    $("#selection-menu p").click(function() 
+    const animationSpeed = 300;
+    const $algorithmSelectionAnimation = $("#algorithm-description.noSelection > div");
+    animateSelectionPointer();
+    function animateSelectionPointer(depth = 0) 
     {
+        if(depth % 8 === 0)
+            $algorithmSelectionAnimation.children('img:not(#start-chevron)').remove();
+        else
+            $algorithmSelectionAnimation.append("<img src='./assets/white-chevron-left-icon.svg' />");
+        setTimeout(animateSelectionPointer.bind(null, (depth + 1) % 8), animationSpeed);
+    }
+
+    $("#selection-menu button").click(function() 
+    {
+        $("#algorithm-description").removeClass("noSelection");
+        $("#selection-menu button").removeClass("selected");
+        $(this).addClass("selected");
         selectedAlgorithm = $(this).attr("algo");
         const data = algorithmDescription[selectedAlgorithm];
         $("#algorithm-description").html(`
@@ -256,8 +269,8 @@ function loadSelectionMenu(weighted)
         `);
         $("#visualize").click(function() 
         {
-            $("td").addClass("animating");
             let {path, totalQueue, table} = data.algorithm(coordinates.source, coordinates.target);
+            $("td").addClass("animating");
             animationRunning = true;
             if(!path)
             {

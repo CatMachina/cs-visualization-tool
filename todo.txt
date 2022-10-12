@@ -1,7 +1,18 @@
 Graph & Pathfinder:
-    - Add weights
-    - Add weighted algorithms
     - Fix network calls on draggable elements
+    - Add algorithms
+        - A*
+        - IDA*
+        - Best First Search
+        - Bidirectional Search
+        Optional (a.k.a. do much later):
+            - B*
+            - Beam Search
+            - D*
+            - IDDFS
+            - Jump Point Search
+            - SSS*
+            - F*
 
 Sorting:
     - Everything

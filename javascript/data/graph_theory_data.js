@@ -19,49 +19,16 @@ const algorithmDescription = {
         shortest: true,
         weighted: true
     },
-    spfa: {
-        title: "Shortest Path Faster Algoritm (SPFA)",
-        description: "Uses a FIFO container in order to process inbound nodes. Upgraded version of BFS, a step (integer) array is used to keep track of visited nodes while also keeping track of which nodes are in the FIFO container.",
-        shortest: true,
-        weighted: true
-    }
 }
 
 const moves = [[0,1], [-1, 0], [1, 0], [0,-1]];
-
-function bfs(sourceCoords, targetCoords) 
-{
-    let queue = [sourceCoords];
-    let totalQueue = [];
-    let visited = {};
-    visited[sourceCoords] = 1;
-    while(queue.length != 0)
-    {
-        const coords = queue.shift();
-        totalQueue.push(coords)
-        if(arrayEqual(coords, targetCoords))
-            break;
-        moves.forEach(move =>
-        {
-            const row = coords[0] + move[0];
-            const col = coords[1] + move[1];
-            const next = $(`tr[row=${row}] > td[col=${col}]`);
-            const nextCoords = [row, col]
-            if(next.length && next.attr("class").indexOf("wall") == -1 && (!visited[nextCoords] || visited[nextCoords] > visited[coords] + 1))
-            {
-                queue.push(nextCoords);
-                visited[nextCoords] = visited[coords] + 1;
-            }
-        });
-    }
-    return { totalQueue, table: visited };
-}
 
 function dfs(sourceCoords, targetCoords)
 {
     let stack = [sourceCoords];
     let totalQueue = [];
     let visited = {};
+    let found = false;
     while(stack.length != 0) 
     {
         const coords = stack.slice(-1).pop();
@@ -71,15 +38,18 @@ function dfs(sourceCoords, targetCoords)
             totalQueue.push(coords);
         }
         if(arrayEqual(coords, targetCoords))
+        {
+            found = true;
             break;
-        let found = false;
+        }
+        found = false;
         for(let i = 0; i < moves.length; ++i)
         {
             const row = coords[0] + moves[i][0];
             const col = coords[1] + moves[i][1];
-            const next = $(`tr[row=${row}] > td[col=${col}]`);
+            const $next = $(`tr[row=${row}] > td[col=${col}]`);
             const nextCoords = [row, col];
-            if(next.length && next.attr("class").indexOf("wall") == -1 && !visited[nextCoords])
+            if($next.length && $next.attr("class").indexOf("wall") == -1 && !visited[nextCoords])
             {
                 stack.push(nextCoords);
                 found = true;
@@ -91,7 +61,41 @@ function dfs(sourceCoords, targetCoords)
             stack.pop();
         }
     }
-    return { path: stack, totalQueue };
+    return { found, path: stack, totalQueue };
+}
+
+function bfs(sourceCoords, targetCoords)
+{
+    let queue = [sourceCoords];
+    let totalQueue = [];
+    let visited = {};
+    let found = false;
+    visited[sourceCoords] = 0;
+    while(queue.length != 0)
+    {
+        const coords = queue.shift();
+        totalQueue.push(coords);
+        if(arrayEqual(coords, targetCoords))
+        {
+            found = true;
+        }
+        moves.forEach(move =>
+        {
+            const row = coords[0] + move[0];
+            const col = coords[1] + move[1];
+            const $next = $(`tr[row=${row}] > td[col=${col}]`);
+            const nextCoords = [row, col];
+            if($next.length && !($next.attr("class") && $next.attr("class").indexOf("wall") !== -1) && (visited[nextCoords] === undefined || visited[nextCoords] > visited[coords] + 1))
+            {
+                if(!inqueue[nextCoords])
+                {
+                    queue.push(nextCoords);
+                }
+                visited[nextCoords] = visited[coords] + 1;
+            }
+        });
+    }
+    return { found, totalQueue, table: visited };
 }
 
 function arrayEqual(arr1, arr2){
