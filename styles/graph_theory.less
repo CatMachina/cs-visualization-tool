@@ -2,10 +2,12 @@
 
 :root {
     --default-gridItem-size: 25;
+    --userInterface-height: 320px;
 }
 
 #user-interface {
     width: 100%;
+    height: var(--userInterface-height);
     background-color: @turquoise;
     h1 {
         .subtitleSecondary();
@@ -15,35 +17,29 @@
     }
     #menu {
         width: 100%;
-        height: calc(30% - 100px);
+        height: calc(100% - 100px);
         display: grid;
-        grid-template-columns: 280px 1px 1fr;
+        grid-template-columns: 280px 1fr;
         grid-template-rows: 12px 1fr 18px;
-        .verticalLine {
-            grid-row-start: 2;
-            grid-column-start: 2;
-            background-color: @white;
-            border: 1px solid @white;
-        }
         #selection-menu {
             grid-row-start: 2;
             grid-column-start: 1;
             display: flex;
             flex-direction: column;
-            overflow: scroll;
+            overflow-y: auto;
             align-content: flex-start;
             margin: 0;
             p {
                 margin: 12px;
-                &:hover {
-                    cursor: pointer;
-                }
             }
             button {
                 width: 100%;
                 background-color: @turquoise;
                 border: none;
                 text-align: left;
+                &:hover {
+                    cursor: pointer;
+                }
             }
             button.selected {
                 background-color: @white;
@@ -52,27 +48,24 @@
                     margin-left: 24px;
                 }
             }
-            &::-webkit-scrollbar {
+            &::-webkit-scrollbar:horizontal {
                 display: none;
             }
-            -ms-overflow-style: none; 
-            scrollbar-width: none; 
-        }
-        #algorithm-description.noSelection {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            h1 {
-                margin: 0;
+            &::-webkit-scrollbar {
+                width: 12px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border-radius: 10px;
             }
-            p {
-                margin: 0;
+            &::-webkit-scrollbar-thumb {
+                background-color: @turquoise;
+                border: 2px solid transparent;
+                border-radius: 9px;
+                background-clip: content-box;
             }
         }
         #algorithm-description {
             grid-row-start: 2;
-            grid-column-start: 3;
+            grid-column-start: 2;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
@@ -118,11 +111,80 @@
                 }
             }
         }
+        #animation-speed-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            p {
+                color: @turquoise;
+                font-size: 14px;
+                margin: 3px 0;
+            }
+            label p {
+                font-size: 20px;
+                font-weight: bold;
+            }            
+            #input-range-extremes {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            #animation-speed {
+                -webkit-appearance: none;
+                width: 100%;
+                &::-webkit-slider-runnable-track {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    height: 6px;
+                    background-color: @turquoise;
+                    border-radius: 4px;
+                }
+                &::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    width: 14px;
+                    height: 14px;
+                    background: @white;
+                    border: 1px solid @lilac;
+                    border-radius: 50%;
+                    margin-top: -4px;
+                    cursor: pointer;
+                }
+            }
+        }
+        #reset-button-wrapper {
+            display: grid;
+            grid-template-areas: 
+                "text path walls"
+                "text weights all"
+            ;
+            grid-template-rows: 1fr 1fr;
+            grid-template-columns: 80px 1fr 1fr;
+            gap: 3px;
+            h2 {
+                grid-area: text;
+                align-self: center;
+                justify-self: center;
+                color: @turquoise;
+            }
+            #reset-path {
+                grid-area: path;
+            }
+            #reset-walls {
+                grid-area: walls;
+            }
+            #reset-weights {
+                grid-area: weights;
+            }
+            #reset-all {
+                grid-area: all;
+            }
+        }
     }
     .buttonPrimary {
         width: 120px;
         height: 40px;
-        border: 2px solid @white;
+        border: 1px solid @white;
         background-color: @turquoise;
         p {
             .textSecondary();
@@ -130,6 +192,11 @@
         }
         &:hover {
             cursor: pointer;
+            border: 1px solid @turquoise;
+            background-color: @white;
+            p {
+                color: @turquoise;
+            }
         }
     }
     .buttonSecondary {
@@ -149,7 +216,7 @@
 
 table {
     width: 100%;
-    height: 70%;
+    height: calc(100% - var(--userInterface-height));
     border-spacing: 0;
     border-collapse: collapse;
     td {

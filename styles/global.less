@@ -7,27 +7,22 @@
 @cyan: #00BCE3;
 @lightPurple: #BFB9FA;
 @blue: #1F51FF;
+@errorRed: #EE4B2B;
+@lilac: #D8B9FF;
 
 @navbarHeight: 65px;
 
+// Typography
 .typography {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
-.unselectable {
-  user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-} 
-
-// Typography
 .titlePrimary {
   font-size: 48px;
   .typography();
   color: @black;
 }
+
 .titleSecondary {
   font-size: 48px;
   .typography();
@@ -85,4 +80,33 @@ body {
   height: 100%;
   padding-top: @navbarHeight;
   box-sizing: border-box;
+}
+
+.unselectable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+} 
+
+.errorMessage {
+  font-size: 12px !important;
+  color: @errorRed !important;
+}
+
+// Common Animation
+
+@keyframes horizontal-shaking {
+  0% { transform: translateX(0) }
+  25% { transform: translateX(15px) }
+  50% { transform: translateX(-15px) }
+  75% { transform: translateX(15px) }
+  100% { transform: translateX(0) }
+ }
+
+.shakingAnimation {
+  animation-name: horizontal-shaking;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
 }

@@ -1,13 +1,6 @@
 .typography {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
-.unselectable {
-  user-select: none;
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-}
 .titlePrimary {
   font-size: 48px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
@@ -56,4 +49,37 @@ body {
   height: 100%;
   padding-top: 65px;
   box-sizing: border-box;
+}
+.unselectable {
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+}
+.errorMessage {
+  font-size: 8px !important;
+  color: #cc0000 !important;
+}
+@keyframes horizontal-shaking {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(10px);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.shakingAnimation {
+  animation-name: horizontal-shaking;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
 }
