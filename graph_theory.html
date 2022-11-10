@@ -1,51 +1,212 @@
 <html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="module" src="javascript/graph_theory.js"></script>
-    <link rel="stylesheet" href="styles/graph_theory.css" />
-  </head>
-  <body>
-    <header>
-      <div id="navbar-location"></div>
-    </header>
-    <div class="pageContainer">
-      <div id="user-interface">
-        <div id="menu">
-          <div id="selection-menu"></div>
-          <div class="verticalLine"></div>
-          <div id="algorithm-description" class="noSelection">
-            <h1>Select an algorithm</h1>
-            <div><img id="start-chevron" class="unselectable" src='./assets/white-chevron-left-icon.svg' draggable="false"/></div>
-          </div>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="module" src="javascript/graph_theory.js"></script>
+        <link rel="stylesheet" href="styles/graph_theory.css" />
+    </head>
+    <body>
+        <header>
+            <div id="navbar-location"></div>
+        </header>
+        <div class="pageContainer">
+            <div id="user-interface">
+                <div id="menu">
+                    <div id="selection-menu"></div>
+                    <div class="verticalLine"></div>
+                    <div id="algorithm-description" class="noSelection">
+                        <h1>Select an algorithm</h1>
+                        <div>
+                            <img
+                                id="start-chevron"
+                                class="unselectable"
+                                src="./assets/white-chevron-left-icon.svg"
+                                draggable="false"
+                            />
+                        </div>
+                    </div>
+                    <p class="errorMessage hidden">Weights are not allowed with this algorithm.</p>
+                </div>
+                <div id="legend">
+                    <button id="help" class="buttonPrimary"><p>Help</p></button>
+                    <div id="selectables"></div>
+                    <div id="animation-speed-container">
+                        <label for="animation-speed"
+                            ><p>Animation Speed (in ms)</p></label
+                        >
+                        <span id="input-range-extremes"
+                            ><p>1ms</p>
+                            <p>1000ms</p></span
+                        >
+                        <input
+                            id="animation-speed"
+                            type="range"
+                            min="1"
+                            max="1000"
+                            value="50"
+                            step="1"
+                        />
+                        <p id="range-value">50ms</p>
+                    </div>
+                    <div id="reset-button-wrapper">
+                        <h2 class="textPrimary">Reset:</h2>
+                        <button id="reset-path" class="buttonPrimary">
+                            <p>Path</p>
+                        </button>
+                        <button id="reset-walls" class="buttonPrimary">
+                            <p>Walls</p>
+                        </button>
+                        <button id="reset-weights" class="buttonPrimary">
+                            <p>Weights</p>
+                        </button>
+                        <button id="reset-all" class="buttonPrimary">
+                            <p>All</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table draggable="false">
+                <tbody></tbody>
+            </table>
         </div>
-        <div id="legend">
-          <button id="instructions" class="buttonPrimary"><p>Help</p></button>
-          <div id="selectables"></div>
-          <div id="animation-speed-container">
-            <label for="animation-speed"><p>Animation Speed (in ms)</p></label>
-            <span id="input-range-extremes"><p>1ms</p><p>1000ms</p></span>
-            <input id="animation-speed" type="range" min="1" max="1000" value="50" step="1" />
-            <p id="range-value">50ms</p>
-          </div>
-          <div id="reset-button-wrapper">
-            <h2 class="textPrimary">Reset:</h2>
-            <button id="reset-path" class="buttonPrimary"><p>Path</p></button>
-            <button id="reset-walls" class="buttonPrimary"><p>Walls</p></button>
-            <button id="reset-weights" class="buttonPrimary"><p>Weights</p></button>
-            <button id="reset-all" class="buttonPrimary"><p>All</p></button>
-          </div>
+        <div id="help-modal" class="modal">
+            <div class="modalContent">
+                <p class="closeButton">&times;</p>
+                <div id="help-step-1" class="modalBody selected">
+                    <h1>Welcome to the Pathfinding Grid Tool!</h1>
+                    <p>
+                        This is a tool to visualize various graph theory and
+                        pathfinder algorithms on a grid!
+                    </p>
+                    <p>
+                        Hopefully this will serve as a great introduction to the
+                        world of algorithms and you will take something away
+                        from it!
+                    </p>
+                </div>
+                <div id="help-step-2" class="modalBody notSelected">
+                    <h1>Algorithm Selection</h1>
+                    <p>Select your chosen algorithm in the menu here!</p>
+                    <p>
+                        More algorithms will be added in the future, and the
+                        list can get quite extensive, so be sure to scroll
+                        through all of them at some point!
+                    </p>
+                </div>
+                <div id="help-step-3" class="modalBody notSelected">
+                    <h1>Algorithm Description</h1>
+                    <p>
+                        The algorithm you have selected will be shown here,
+                        along with a description of the algorithm and notable
+                        points.
+                    </p>
+                    <p>
+                        Click on the "Visualize" button in order to see the
+                        selected algorithm running on the grid below!
+                    </p>
+                </div>
+                <div id="help-step-4" class="modalBody notSelected">
+                    <h1>The Grid</h1>
+                    <p>
+                        The grid is for you to change to your liking to see your
+                        chosen algorithm run in many different cases!
+                    </p>
+                    <p>
+                        The algorithm begins at the source node (denoted by the
+                        house icon) and ends at the destination/target node
+                        (denoted by the target icon). You may pick these up and
+                        place them wherever you like!
+                    </p>
+                </div>
+                <div id="help-step-5" class="modalBody notSelected">
+                    <h1>Adding Elements to the Grid</h1>
+                    <p>
+                        Add obstacles to the grid through the icons here! Click
+                        on any icon and the click (and optionally drag) on the
+                        grid to create elements!
+                    </p>
+                    <ul>
+                        <li>
+                            The black square is a wall where the algorithm
+                            cannot pass through.
+                        </li>
+                        <li>
+                            The numbers indicate weight and has an associated
+                            cost for the algorithm to pass through.
+                        </li>
+                        <li>
+                            The eraser icon allows you to erase any element on
+                            the grid (besides the source and target nodes)!
+                        </li>
+                    </ul>
+                </div>
+                <div id="help-step-6" class="modalBody notSelected">
+                    <h1>Changing Animation Speed</h1>
+                    <p>
+                        Change the visualization speed of the running algorithm
+                        by changing the slider!
+                    </p>
+                    <p>
+                        It is denoted by milliseconds, representing the time
+                        between grid cells starting their animations.
+                    </p>
+                </div>
+                <div id="help-step-7" class="modalBody notSelected">
+                    <h1>Resetting the Grid</h1>
+                    <p>Reset the state of the grid through the buttons here!</p>
+                    <ul>
+                        <li>
+                            Resetting ALL of it will revert the grid back to
+                            when you first loaded the page.
+                        </li>
+                        <li>Resetting WALLS clear all walls from the grid.</li>
+                        <li>
+                            Resetting WEIGHTS clear all weights from the grid.
+                        </li>
+                        <li>
+                            Resetting PATH clear all animation done to the grid.
+                        </li>
+                    </ul>
+                </div>
+                <div id="help-step-8" class="modalBody notSelected">
+                    <h1>Thank You!</h1>
+                    <p>
+                        Thank you for using the Pathfinder Visualization Tool!
+                    </p>
+                    <p>
+                        This was a terribly fun project to make, and I wish you
+                        have as much fun using it as I enjoyed creating it.
+                    </p>
+                    <p>
+                        If there are any bugs in the project or if you have any
+                        inquiries, check out the code repository on github and
+                        an issue. The source code for this project will be also
+                        be there so if you're curious, go check it out!
+                    </p>
+                </div>
+                <div class="modalButtonWrapper">
+                    <button
+                        id="help-modal-previous-button"
+                        class="buttonSecondary"
+                    >
+                        <p>Skip Tutorial</p>
+                    </button>
+                    <button id="help-modal-next-button" class="buttonPrimary">
+                        <p>Next</p>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-      <table draggable="false">
-          <tbody>
-              
-          </tbody>
-      </table>
-    </div>
-  </body>
-  <script>
-    $.get("navbar.html", function (data) {
-      $("#navbar-location").html(data);
-    });
-  </script>
+        <div id="path-not-found-modal" class="modal">
+            <div class="modalContent"">
+                <h1>
+                    Path Not Found.
+                </h1>
+            </div>
+        </div>
+    </body>
+    <script>
+        $.get("navbar.html", function (data) {
+            $("#navbar-location").html(data);
+        });
+    </script>
 </html>

@@ -1,8 +1,7 @@
 Graph & Pathfinder:
-    - Add algorithms
-        - Best First Search
-        - Bidirectional Search
-        Optional (a.k.a. do much later):
+    Optional (a.k.a. do later):
+        - Add maze generation
+        - Add algorithms
             - B*
             - Beam Search
             - D*

@@ -9,11 +9,33 @@ let coordinates = {};
 let draggedElement = null;
 let animationRunning = false;
 let animationSpeed = 50;
+let helpModalStep = 1;
+let helpModalStyles;
+let helpModalTarget;
 
 $(document).ready(function() 
 {
     makeGrid($("tbody"));
     loadSelectionMenu();
+    $("#help").click(function() 
+    {
+        helpModalStep = 1;
+        $(".modalBody").removeClass("selected").addClass("notSelected");
+        $("#help-step-1").removeClass("notSelected").addClass("selected");
+        $("#help-modal-previous-button > p").text("Skip Tutorial");
+        $("#help-modal-next-button > p").text("Next");
+        $(".modalContent").removeAttr("style");
+        $("#help-modal").addClass("showModal");
+    });
+    $(".closeButton").click(closeHelpModal);
+    $(window).click(function(event) 
+    {
+        if(event.target.id === "help-modal") {
+            closeHelpModal();
+        }
+    })
+    $("#help-modal-next-button").click(helpModalNextButton);
+    $("#help-modal-previous-button").click(helpModalPreviousButton);
     $("#selectables").append(generateSelectables());
     $("#selectables > img").click(function() 
     {
@@ -46,6 +68,56 @@ $(document).ready(function()
     });
 });
 
+$(window).on("load", function() {
+    const $selectionMenu = $("#selection-menu");
+    const $algorithmDescriptionBlock = $("#algorithm-description");
+    const $table = $("table");
+    const $selectables = $("#selectables");
+    const $animationSpeedContainer = $("#animation-speed-container");
+    const $resetButtonWrapper = $("#reset-button-wrapper");
+    helpModalTarget = {
+        2: $selectionMenu,
+        3: $algorithmDescriptionBlock,
+        4: $table,
+        5: $selectables,
+        6: $animationSpeedContainer,
+        7: $resetButtonWrapper
+    }
+    helpModalStyles = {
+        1: {
+            "top": "50%",
+            "left": "50%"
+        },
+        2: {
+            "top": $selectionMenu.offset().top + $selectionMenu.height(),
+            "left": $selectionMenu.offset().left,
+        },
+        3: {
+            "top": $algorithmDescriptionBlock.offset().top + $algorithmDescriptionBlock.height(),
+            "left": $algorithmDescriptionBlock.offset().left + $algorithmDescriptionBlock.width() / 2
+        },
+        4: {
+            "top": $table.offset().top,
+            "left": $table.offset().left + $table.width() / 2
+        },
+        5: {
+            "top": $selectables.offset().top + $selectables.height(),
+            "left": Math.max(0, $selectables.offset().left + $selectables.width() / 2 - 350)
+        },
+        6: {
+            "top": $animationSpeedContainer.offset().top + $animationSpeedContainer.height(),
+            "left": $animationSpeedContainer.offset().left + $animationSpeedContainer.width() / 2
+        },
+        7: {
+            "top": $resetButtonWrapper.offset().top + $resetButtonWrapper.height(),
+            "left": Math.min($(window).outerWidth() - 600, $resetButtonWrapper.offset().left + $resetButtonWrapper.width() / 2 - 300),
+        },
+        8: {
+            "top": "50%",
+            "left": "50%"
+        }
+    }
+});
 
 function animateAlgorithm(totalQueue, pathAnimationCallback) 
 {
@@ -64,21 +136,25 @@ function animateAlgorithm(totalQueue, pathAnimationCallback)
     setTimeout(animateAlgorithm.bind(this, totalQueue, pathAnimationCallback), animationSpeed);
 }
 
-function animatePath(path) 
+function animatePath(path, found) 
 {
     if(!animationRunning)
     {
+        if(!found)
+            displayPathNotFound();
         cancelAnimation();
         return;
     }
     if(path.length === 0)
     {
+        if(!found)
+            displayPathNotFound();
         cancelAnimation();
         return;
     }
     const coords = path.shift();
     $(`tr[row=${coords[0]}] > td[col=${coords[1]}]`).removeClass("visited").addClass("path");
-    setTimeout(animatePath.bind(this, path), animationSpeed * 2);
+    setTimeout(animatePath.bind(this, path), animationSpeed);
 }
 
 function cancelAnimation() 
@@ -95,6 +171,19 @@ function cannotDrop($element)
 function checkCell($element) 
 {
     return animationRunning || $element.attr("id") === "source-node" || $element.attr("id") === "target-node";
+}
+
+function closeHelpModal() 
+{
+    $("#help-modal").removeClass("showModal");
+    $("*").removeClass("helpModalTarget");
+}
+
+function displayPathNotFound()
+{
+    $("#path-not-found-modal").addClass("showModal");
+    $("#path-not-found-modal h1").addClass("shakingAnimation").on("animationend", () => {$(this).removeClass("shakingAnimation")});
+    setTimeout(() => {$("#path-not-found-modal").removeClass("showModal")}, 2000);
 }
 
 function generateSelectables()
@@ -148,6 +237,47 @@ function getPath(table, totalQueue)
     return stack;
 }
 
+function helpModalNextButton()
+{
+    if(helpModalStep === 1)
+        $("#help-modal-previous-button > p").text("Previous");
+    else if(helpModalStep === 7)
+        $("#help-modal-next-button > p").text("Finish!");
+    else if(helpModalStep === 8)
+    {
+        closeHelpModal();
+        return;
+    }
+    if(helpModalTarget[helpModalStep]?.length)
+        helpModalTarget[helpModalStep].removeClass("helpModalTarget");
+    $(`#help-step-${helpModalStep}`).addClass("notSelected").removeClass("selected");
+    helpModalStep += 1;
+    $(`#help-step-${helpModalStep}`).removeClass("notSelected").addClass("selected");
+    $("#help-modal > .modalContent").css(helpModalStyles[helpModalStep]);
+    if(helpModalTarget[helpModalStep]?.length)
+        helpModalTarget[helpModalStep].addClass("helpModalTarget");
+}
+
+function helpModalPreviousButton(){
+    if(helpModalStep === 1)
+    {
+        closeHelpModal();
+        return;
+    }
+    if(helpModalStep === 2)
+        $("#help-modal-previous-button > p").text("Skip Tutorial");
+    else if(helpModalStep === 8)
+        $("#help-modal-next-button > p").text("Next");
+    if(helpModalTarget[helpModalStep]?.length)
+        helpModalTarget[helpModalStep].removeClass("helpModalTarget");
+    $(`#help-step-${helpModalStep}`).addClass("notSelected").removeClass("selected");
+    helpModalStep -= 1;
+    $(`#help-step-${helpModalStep}`).removeClass("notSelected").addClass("selected");
+    $("#help-modal > .modalContent").css(helpModalStyles[helpModalStep]);
+    if(helpModalTarget[helpModalStep]?.length)
+        helpModalTarget[helpModalStep].addClass("helpModalTarget");
+}
+
 function loadSelectionMenu()
 {
     let menuElementHTMLString = "";
@@ -168,7 +298,7 @@ function loadSelectionMenu()
         setTimeout(animateSelectionPointer.bind(null, (depth + 1) % 8), animationSpeed);
     }
 
-    $("#selection-menu button").click(visualizeButtonClick);
+    $("#selection-menu button").click(selectionMenuButtonClick);
 }
 
 function makeElement($element)
@@ -300,8 +430,9 @@ function selectGridPlacementElement($element)
     $element.addClass("selected");
 }
 
-function visualizeButtonClick()
+function selectionMenuButtonClick()
 {
+    $("#menu .errorMessage").addClass("hidden");
     const $algorithmDescription = $("#algorithm-description");
     $algorithmDescription.removeClass("noSelection");
     $("#selection-menu button").removeClass("selected");
@@ -312,7 +443,6 @@ function visualizeButtonClick()
         <h1>${data.title}</h1>
         <p>${data.description}</p>
         <button id="visualize" class="buttonPrimary"><p>Visualize</p></button>
-        <p class="errorMessage"></p>
     `);
     $("#visualize").click(function() 
     {
@@ -320,11 +450,10 @@ function visualizeButtonClick()
         $("reset-weights").attr("disabled", true);
         if(!data.weighted && $("td[weight]").length)
         {
-            $algorithmDescription.children("p.errorMessage").text("Weights not allowed with this algorithm.");
-            $(this).addClass("shakingAnimation").on("animationend", function(){ $(this).removeClass("shakingAnimation")});
+            $("#menu .errorMessage").removeClass("hidden");
+            $(this).addClass("shakingAnimation").on("animationend", () => { $(this).removeClass("shakingAnimation")});
             return;
         }
-        $algorithmDescription.children(".errorMessage").text("");
         $("td").removeClass("visited").removeClass("path");
         let {path, totalQueue, table, found} = data.algorithm(coordinates.source, coordinates.target);
         $("td").addClass("animating");
@@ -333,6 +462,6 @@ function visualizeButtonClick()
         {
             path = getPath(table, totalQueue);
         }
-        animateAlgorithm(totalQueue, animatePath.bind(null, path ? path : []));
+        animateAlgorithm(totalQueue, animatePath.bind(null, path ? path : [], found));
     });
 }
