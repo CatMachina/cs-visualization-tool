@@ -1,44 +1,166 @@
 // Mixins + Variables
 @black: black;
-@darkGrey: #111016;
 @white: white;
+@lightGrey: #bbc4cc;
+@turquoise: #0e9594;
+@yellow: #ffef00;
+@cyan: #00bce3;
+@lightPurple: #bfb9fa;
+@blue: #1f51ff;
+@errorRed: #ee4b2b;
+@lilac: #d8b9ff;
+@papyrus: #f1fffa;
+@fuchsia: #cc4bc2;
+@eggshell: #FCE1C5;
 
-.typography {
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-}
+@navbarHeight: 65px;
 
 // Typography
-.titlePrimary {
-  font-size: 48px;
-  .typography();
-  color: @black;
-}
-.titleSecondary {
-  font-size: 48px;
-  .typography();
-  color: @white;
+.typography {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
-.subtitlePrimary {
-  font-size: 24px;
-  .typography();
-  color: @black;
+.titlePrimary (@color: @black) {
+    font-size: 48px;
+    .typography();
+    color: @color;
 }
 
-.subtitleSecondary {
-  font-size: 24px;
-  .typography();
-  color: @white;
+.titleSecondary (@color: @white){
+    font-size: 48px;
+    .typography();
+    color: @color;
 }
 
-.textPrimary {
-  font-size: 12px;
-  .typography();
-  color: @black;
+.subtitlePrimary (@color: @black){
+    font-size: 36px;
+    .typography();
+    color: @color;
 }
 
-.textSecondary {
-  font-size: 12px;
-  .typography();
-  color: @white;
+.subtitleSecondary (@color: @white) {
+    font-size: 36px;
+    .typography();
+    color: @color;
+}
+
+.textPrimary (@color: @black){
+    font-size: 18px;
+    .typography();
+    color: @color;
+}
+
+.textSecondary (@color: @white) {
+    font-size: 18px;
+    .typography();
+    color: @color;
+}
+
+@textVeryLarge: 32px;
+@textLarge: 28px;
+@textMedium: 24px;
+@textSmall: 14px;
+@textVerySmall: 12px;
+
+// Global styles
+
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100%;
+    margin: 0;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+.pageContainer {
+    width: 100%;
+    height: 100%;
+    padding-top: @navbarHeight;
+    box-sizing: border-box;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    .modalContent {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 50%;
+        height: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 16px;
+        border-radius: 10px;
+    }
+    .closeButton {
+        float: right;
+        margin: 0 6px 0 auto;
+        cursor: pointer;
+    }
+}
+.modal.showModal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 10;
+}
+
+.unselectable {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.errorMessage {
+    font-size: 12px !important;
+    color: @errorRed !important;
+}
+
+// Common Animation
+
+@keyframes horizontal-shaking {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(15px);
+    }
+    50% {
+        transform: translateX(-15px);
+    }
+    75% {
+        transform: translateX(15px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.shakingAnimation {
+    animation-name: horizontal-shaking;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
 }

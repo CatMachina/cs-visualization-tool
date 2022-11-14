@@ -1,6 +1,36 @@
 .typography {
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
+.titlePrimary {
+  font-size: 48px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: black;
+}
+.titleSecondary {
+  font-size: 48px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: white;
+}
+.subtitlePrimary {
+  font-size: 36px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: black;
+}
+.subtitleSecondary {
+  font-size: 36px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: white;
+}
+.textPrimary {
+  font-size: 18px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: black;
+}
+.textSecondary {
+  font-size: 18px;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  color: white;
+}
 html {
   height: 100%;
   box-sizing: border-box;
@@ -29,6 +59,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
 .modal .modalContent {
   position: absolute;
@@ -62,7 +93,7 @@ body {
   -o-user-select: none;
 }
 .hidden {
-  display: none;
+  visibility: none;
 }
 .errorMessage {
   font-size: 12px !important;
@@ -89,49 +120,4 @@ body {
   animation-name: horizontal-shaking;
   animation-duration: 0.2s;
   animation-fill-mode: forwards;
-}
-a {
-  text-decoration: none;
-}
-#navbar-location {
-  width: 100%;
-  height: 65px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-#navbar-location #navbar {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: flex-end;
-  background-color: white;
-}
-#navbar-location #navbar #visualization-tool-home {
-  margin: 0 auto 0 15px;
-}
-#navbar-location #navbar #visualization-tool-home h1 {
-  font-size: 36px;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  color: black;
-}
-#navbar-location #navbar #visualization-tool-home:hover {
-  cursor: pointer;
-}
-#navbar-location #navbar .navbarButton {
-  width: 180px;
-  height: 100%;
-  text-align: center;
-  background-color: white;
-  border: none;
-}
-#navbar-location #navbar .navbarButton p {
-  font-size: 18px;
-  font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  color: black;
-  margin: auto;
-}
-#navbar-location #navbar .navbarButton:hover {
-  background-color: #bbc4cc;
-  cursor: pointer;
 }
