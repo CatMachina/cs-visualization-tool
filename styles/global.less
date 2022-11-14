@@ -2,13 +2,16 @@
 @black: black;
 @white: white;
 @lightGrey: #bbc4cc;
-@turquoise: #30d5c8;
+@turquoise: #0e9594;
 @yellow: #ffef00;
 @cyan: #00bce3;
 @lightPurple: #bfb9fa;
 @blue: #1f51ff;
 @errorRed: #ee4b2b;
 @lilac: #d8b9ff;
+@papyrus: #f1fffa;
+@fuchsia: #cc4bc2;
+@eggshell: #FCE1C5;
 
 @navbarHeight: 65px;
 
@@ -17,40 +20,40 @@
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
-.titlePrimary {
+.titlePrimary (@color: @black) {
     font-size: 48px;
     .typography();
-    color: @black;
+    color: @color;
 }
 
-.titleSecondary {
+.titleSecondary (@color: @white){
     font-size: 48px;
     .typography();
-    color: @white;
+    color: @color;
 }
 
-.subtitlePrimary {
+.subtitlePrimary (@color: @black){
     font-size: 36px;
     .typography();
-    color: @black;
+    color: @color;
 }
 
-.subtitleSecondary {
+.subtitleSecondary (@color: @white) {
     font-size: 36px;
     .typography();
-    color: @white;
+    color: @color;
 }
 
-.textPrimary {
+.textPrimary (@color: @black){
     font-size: 18px;
     .typography();
-    color: @black;
+    color: @color;
 }
 
-.textSecondary {
+.textSecondary (@color: @white) {
     font-size: 18px;
     .typography();
-    color: @white;
+    color: @color;
 }
 
 @textVeryLarge: 32px;
@@ -93,7 +96,6 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
-    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
     .modalContent {
         position: absolute;
         top: 50%;

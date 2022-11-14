@@ -18,21 +18,25 @@ a {
         background-color: @white;
         #visualization-tool-home {
             margin: 0 auto 0 15px;
+            h1 {
+                .subtitlePrimary();
+            }
             &:hover {
                 cursor: pointer;
             }
         }
         .navbarButton {
-            width: 120px;
+            width: 180px;
             height: 100%;
             text-align: center;
             background-color: @white;
             border: none;
             p {
-                font-size: 18px;
+                .textPrimary();
                 margin: auto;
             }
             &:hover {
+                background-color: @lightGrey;
                 cursor: pointer;
             }
         }
