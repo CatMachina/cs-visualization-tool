@@ -4,7 +4,7 @@ $(document).ready(function() {
         $("#visualization-tool-home, #home-navbar-button").click(function() {
             const urlBreadcrumbs = window.location.href.split("/");
             urlBreadcrumbs.pop();
-            console.log(window.location.href);
+            // console.log(window.location.href);
             window.location.href = urlBreadcrumbs.join("/");
         });
     });
