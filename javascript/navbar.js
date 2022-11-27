@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $.get("navbar_dsaav.html", function (data) {
-        $("#navbar-location-dsaav").html(data);
+    $.get("navbar.html", function (data) {
+        $("#navbar-location").html(data);
         $("#visualization-tool-home, #home-navbar-button").click(function() {
             const urlBreadcrumbs = window.location.href.split("/");
             urlBreadcrumbs.pop();

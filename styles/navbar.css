@@ -93,45 +93,45 @@ body {
 a {
   text-decoration: none;
 }
-#navbar-location-dsaav {
+#navbar-location {
   width: 100%;
   height: 65px;
   position: absolute;
   top: 0;
   left: 0;
 }
-#navbar-location-dsaav #navbar {
+#navbar-location #navbar {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: flex-end;
   background-color: white;
 }
-#navbar-location-dsaav #navbar #visualization-tool-home {
+#navbar-location #navbar #visualization-tool-home {
   margin: 0 auto 0 15px;
 }
-#navbar-location-dsaav #navbar #visualization-tool-home h1 {
+#navbar-location #navbar #visualization-tool-home h1 {
   font-size: 36px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: black;
 }
-#navbar-location-dsaav #navbar #visualization-tool-home:hover {
+#navbar-location #navbar #visualization-tool-home:hover {
   cursor: pointer;
 }
-#navbar-location-dsaav #navbar .navbarButton {
+#navbar-location #navbar .navbarButton {
   width: 180px;
   height: 100%;
   text-align: center;
   background-color: white;
   border: none;
 }
-#navbar-location-dsaav #navbar .navbarButton p {
+#navbar-location #navbar .navbarButton p {
   font-size: 18px;
   font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   color: black;
   margin: auto;
 }
-#navbar-location-dsaav #navbar .navbarButton:hover {
+#navbar-location #navbar .navbarButton:hover {
   background-color: #bbc4cc;
   cursor: pointer;
 }
