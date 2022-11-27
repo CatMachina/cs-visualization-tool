@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $.get("../navbar.html", function (data) {
+    $.get("../navbar-dsaav.html", function (data) {
         $("#navbar-location-dsaav").html(data);
         $("#visualization-tool-home, #home-navbar-button").click(function() {
             const urlBreadcrumbs = window.location.href.split("/");
